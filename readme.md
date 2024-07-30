@@ -38,12 +38,12 @@ import asyncio
 
 async def main():
     iol = IOLApi()
-    await iol.login(
+    await iol.login_async(
         username='', # Correo electronico
         password=''
     )
 
-    estado_cuenta = await iol.get_estadocuenta()
+    estado_cuenta = await iol.get_estadocuenta_async()
     cuenta_arg = [cuenta for cuenta in estado_cuenta.cuentas if cuenta.moneda == 'peso_Argentino'][0]
     print(cuenta_arg.saldo)
 
@@ -59,12 +59,12 @@ import asyncio
 
 async def main():
     iol = IOLApi()
-    await iol.login(
+    await iol.login_async(
         username='', # Correo electronico
         password=''
     )
   
-    portafolio = await iol.get_portafolio_by_pais(pais='argentina')
+    portafolio = await iol.get_portafolio_by_pais_async(pais='argentina')
     syp500 = [activo for activo in portafolio.activos if activo.titulo.simbolo == 'SPY'][0]
     print(syp500.cantidad)
 
@@ -83,12 +83,12 @@ from dataclasses import asdict # <-- Para pasarlo a dict, y luego a json
 
 async def main():
     iol = IOLApi()
-    await iol.login(
+    await iol.login_async(
         username='', # Correo electronico
         password=''
     )
   
-    portafolio = await iol.get_portafolio_by_pais(pais='argentina')
+    portafolio = await iol.get_portafolio_by_pais_async(pais='argentina')
     print(json.dumps(asdict(portafolio)))
 
 if __name__ == '__main__':

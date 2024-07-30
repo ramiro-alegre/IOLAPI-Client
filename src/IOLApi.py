@@ -24,7 +24,7 @@ class IOLApi():
     def __init__(self):
         pass
     
-    async def login(self, username:str, password:str) -> Token:
+    async def login_async(self, username:str, password:str) -> Token:
         """Primer método a llamar antes de realizar cualquier acción
 
         Args:
@@ -45,7 +45,7 @@ class IOLApi():
         
         return token
 
-    async def check_token_jwt(self) -> None:
+    async def check_token_jwt_async(self) -> None:
         now = datetime.now()
         if IOLApi.token_jwt_expires_in > now:
             return
@@ -65,15 +65,15 @@ class IOLApi():
         IOLApi.refresh_token = token.refresh_token
         IOLApi.refresh_token_expires_in = iol_api_utils.parse_http_date(http_date=token.expires_in)
     
-    async def get_estadocuenta(self) -> EstadoCuenta:
-        await self.check_token_jwt()
+    async def get_estadocuenta_async(self) -> EstadoCuenta:
+        await self.check_token_jwt_async()
         data = await http_utils.get_util(
             url= f'{self._IOL_API_BASE_URL}estadocuenta',
             headers= self.__get_authorization_header()
         )
         return EstadoCuenta.from_dict(data)
 
-    async def get_portafolio_by_pais(self, pais:str = 'argentina') -> Portafolio:
+    async def get_portafolio_by_pais_async(self, pais:str = 'argentina') -> Portafolio:
         """Permite obtener los activos que tengo en mí cuenta. Por ejemplo, cedears.
 
         Args:
@@ -82,23 +82,23 @@ class IOLApi():
         Returns:
             Portafolio
         """
-        await self.check_token_jwt()
+        await self.check_token_jwt_async()
         data = await http_utils.get_util(
             url= f'{self._IOL_API_BASE_URL}portafolio/{pais}',
             headers= self.__get_authorization_header()
         )
         return Portafolio.from_dict(data)
     
-    async def get_operaciones(self, numero : int) -> dict:
-        await self.check_token_jwt()
+    async def get_operaciones_async(self, numero : int) -> dict:
+        await self.check_token_jwt_async()
         data = await http_utils.delete_util(
             url= f'{self._IOL_API_BASE_URL}operaciones/{numero}',
             headers= self.__get_authorization_header()
         )
         return data
     
-    async def get_operaciones(self) -> Operaciones:
-        await self.check_token_jwt()
+    async def get_operaciones_async(self) -> Operaciones:
+        await self.check_token_jwt_async()
         data = await http_utils.get_util(
             url= f'{self._IOL_API_BASE_URL}operaciones',
             headers= self.__get_authorization_header()
